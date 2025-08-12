@@ -1,0 +1,8 @@
+node_modules
+
+.env
+.yandex.cloud.env
+yandexCloudFn.zip
+yandexCloudFnDist
+
+http-client.private.env.json

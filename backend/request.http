@@ -1,0 +1,13 @@
+POST http://localhost:8080/api/send-message
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Ivan",
+  "message": "Hi!"
+}
+
+###
+POST https://api.telegram.org/bot{{tgBotToken}}/getUpdates
+accept: application/json
+Content-Type: application/json

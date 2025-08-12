@@ -1,0 +1,44 @@
+openapi: 3.0.0
+info:
+  title: Sample API
+  version: 1.0.0
+servers:
+  - url: <технический урл>
+  - url: <публичный урл>
+paths:
+  /:
+    get:
+      x-yc-apigateway-integration:
+        bucket: <имя бакета со статическим сайтом>
+        error_object: index.html
+        type: object_storage
+        service_account_id: <айди сервисного аккаунта с правами на чтение бакета>
+        object: 'index.html'
+  /{file+}:
+    get:
+      parameters:
+        - name: file
+          in: path
+          required: false
+          schema:
+            type: string
+      x-yc-apigateway-integration:
+        bucket: <имя бакета со статическим сайтом>
+        error_object: index.html
+        type: object_storage
+        service_account_id: <айди сервисного аккаунта с правами на чтение бакета>
+        object: '{file}'
+  /api/{path+}:
+    x-yc-apigateway-any-method:
+      parameters:
+        - name: path
+          in: path
+          description: backend path
+          required: true
+          schema:
+            type: string
+      x-yc-apigateway-integration:
+        type: cloud_functions
+        function_id: <айди облачной функции с нашим бэкендом>
+        tag: "$latest"
+        service_account_id: <айди сервисного аккаунта с правами на вызов облачной функции>
