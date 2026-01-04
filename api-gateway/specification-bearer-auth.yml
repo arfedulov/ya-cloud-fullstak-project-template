@@ -1,0 +1,44 @@
+openapi: 3.0.0
+info:
+  title: Sample API
+  version: 1.0.0
+servers:
+  - url: <технический урл>
+  - url: <публичный урл>
+paths:
+  /:
+    get:
+      security:
+        - httpBearerAuth: [ ]
+      x-yc-apigateway-integration:
+        bucket: <имя бакета со статическим сайтом>
+        type: object_storage
+        service_account_id: <айди сервисного аккаунта с правами на чтение бакета>
+        object: 'index.html'
+  /{file+}:
+    get:
+      security:
+        - httpBearerAuth: [ ]
+      parameters:
+        - name: file
+          in: path
+          required: false
+          schema:
+            type: string
+      x-yc-apigateway-integration:
+        bucket: <имя бакета со статическим сайтом>
+        type: object_storage
+        service_account_id: <айди сервисного аккаунта с правами на чтение бакета>
+        object: '{file}'
+        error_object: '{file}/index.html'
+components:
+  securitySchemes:
+    httpBearerAuth:
+      type: http
+      scheme: bearer
+      x-yc-apigateway-authorizer:
+        type: function
+        function_id: <айди облачной функции-авторизатора>
+        tag: "$latest"
+        service_account_id: <айди сервисного аккаунта с правами на вызов облачной функции>
+        authorizer_result_ttl_in_seconds: 300
